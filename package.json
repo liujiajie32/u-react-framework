@@ -1,0 +1,33 @@
+{
+  "name": "u-react-framework",
+  "version": "0.0.1",
+  "description": "A web UI framework based on React",
+  "main": "index.js",
+  "scripts": {
+    "test": "webpack --config ./configs/webpack.config.js --progress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liujiajie32/u-react-framework.git"
+  },
+  "keywords": [
+    "UI",
+    "framework",
+    "react"
+  ],
+  "author": "LIU Jiajie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liujiajie32/u-react-framework/issues"
+  },
+  "homepage": "https://github.com/liujiajie32/u-react-framework#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "clean-webpack-plugin": "^0.1.16",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "webpack": "^3.5.5"
+  }
+}
