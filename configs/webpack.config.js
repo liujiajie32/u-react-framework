@@ -10,7 +10,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 // Folder path definition
 const ROOT_PATH = path.resolve(__dirname, '../');
 const NODE_MODULES_PATH = path.resolve(ROOT_PATH, 'node_modules');
-const JS_DIST_PATH = path.resolve(ROOT_PATH, 'dist/js');
+const DIST_JS_PATH = path.resolve(ROOT_PATH, 'dist/js');
+const DIST_HTML_PATH = path.resolve(ROOT_PATH, 'dist/html');
 
 
 // Judge if there's an argument '-p' or '--production' in script
@@ -25,13 +26,13 @@ var outputName  = isProduction ? 'u.all.min' : 'u.all';
 
 var cleanPath = [
   path.resolve(ROOT_PATH, '*.zip'),
-  path.resolve(JS_DIST_PATH, '*.html'),
+  path.resolve(DIST_HTML_PATH, '*.html'),
 ];
 
 if(isProduction) {
-  cleanPath.push(path.resolve(JS_DIST_PATH, '*.min.js'));
+  cleanPath.push(path.resolve(DIST_JS_PATH, '*.min.js'));
 } else {
-  cleanPath.push(path.resolve(JS_DIST_PATH, '*.js'));
+  cleanPath.push(path.resolve(DIST_JS_PATH, '*.js'));
 }
 
 
@@ -44,7 +45,7 @@ module.exports = {
     'componentB': './src/componentB/componentB',
   },
   output: {
-    path: JS_DIST_PATH,
+    path: DIST_JS_PATH,
     filename: '[name].js'
   },
   plugins: [
@@ -77,7 +78,7 @@ module.exports = {
       test:/\.(js|jsx)$/,
       loader: 'babel-loader',
       exclude: /(node_modules)/,
-      // include: JS_DIST_PATH,
+      // include: DIST_JS_PATH,
       query: {
         presets: ['es2015', 'stage-1', 'react'],
         plugins: [
