@@ -107,7 +107,28 @@ var config = {
     extensions:['.js', '.jsx', '.css']
   }
 
-
 }
+
+// // 遍历所有.html文件，使用HtmlWebpackPlugin将资源文件引入html中
+// var htmlfiles = fs.readdirSync(HTML_ROOT_PATH);
+// htmlfiles.forEach(function (item) {
+//     var currentpath = path.join(HTML_ROOT_PATH, item);
+//     //console.log(currentpath);
+//     var extname = path.extname(currentpath);
+//     if (fs.statSync(currentpath).isFile()) {
+//         //console.log("replace", currentpath.replace("\\html\\", "\\dist\\"))
+//         config.plugins.push(new HtmlWebpackPlugin({
+//             title: '',
+//             template: currentpath,
+//             filename: currentpath.replace("\\html\\", "\\dist\\"),
+//             minify: isprod ? htmlMinifyOptions : false, // 生产模式下压缩html文件
+//             //chunks: ['index', 'vendors'],   // 配置该html文件要添加的模块
+//             inject: 'body'
+//         }))
+//     }
+// });
+
+
+
 
 module.exports = config;
