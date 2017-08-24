@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 54);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -812,9 +812,7 @@ module.exports = function (KEY, exec) {
 module.exports = React;
 
 /***/ }),
-/* 52 */,
-/* 53 */,
-/* 54 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -857,16 +855,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // import logo from './logo.svg';
 // import './App.css';
 
-var ComponentB = function (_Component) {
-  _inherits(ComponentB, _Component);
+var ComponentA = function (_Component) {
+  _inherits(ComponentA, _Component);
 
-  function ComponentB() {
-    _classCallCheck(this, ComponentB);
+  function ComponentA() {
+    _classCallCheck(this, ComponentA);
 
-    return _possibleConstructorReturn(this, (ComponentB.__proto__ || (0, _getPrototypeOf2["default"])(ComponentB)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (ComponentA.__proto__ || (0, _getPrototypeOf2["default"])(ComponentA)).apply(this, arguments));
   }
 
-  _createClass(ComponentB, [{
+  _createClass(ComponentA, [{
     key: "render",
     value: function render() {
       return _react2["default"].createElement(
@@ -875,7 +873,6 @@ var ComponentB = function (_Component) {
         _react2["default"].createElement(
           "div",
           { className: "App-header" },
-          "//",
           _react2["default"].createElement("img", { src: "", className: "App-logo", alt: "logo" }),
           _react2["default"].createElement(
             "h2",
@@ -898,11 +895,32 @@ var ComponentB = function (_Component) {
     }
   }]);
 
-  return ComponentB;
+  return ComponentA;
 }(_react.Component);
 
-exports["default"] = ComponentB;
+exports["default"] = ComponentA;
 module.exports = exports["default"];
+
+/***/ }),
+/* 53 */,
+/* 54 */,
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _componentA = __webpack_require__(52);
+
+var _componentA2 = _interopRequireDefault(_componentA);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+ReactDOM.render(React.createElement(_componentA2['default'], null), document.getElementById('root'));
+//registerServiceWorker();
+//import React from 'react';
+//import ReactDOM from 'react-dom';
+//import './index.css';
 
 /***/ })
 /******/ ]);

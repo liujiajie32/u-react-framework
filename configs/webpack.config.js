@@ -14,6 +14,7 @@ const DIST_JS_PATH = path.resolve(ROOT_PATH, 'dist/js');
 const DIST_HTML_PATH = path.resolve(ROOT_PATH, 'dist/html');
 
 
+
 // Judge if there's an argument '-p' or '--production' in script
 var isProduction = false;
 for (let i in process.argv) {
@@ -36,13 +37,14 @@ if(isProduction) {
 }
 
 
-module.exports = {
+var config = {
   entry:  {
     [outputName]: [
       './src/componentA/componentA'
     ],
     'componentA': './src/componentA/componentA',
     'componentB': './src/componentB/componentB',
+    'test-componentA': './src/componentA/test-componentA',
   },
   output: {
     path: DIST_JS_PATH,
@@ -64,7 +66,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Test ComponentA',
       filename: '../html/test-componentA.html',
-      chunks: ['componentA']
+      template: path.resolve(ROOT_PATH, './src/componentA/test-componentA.ejs'),
+      chunks: ['test-componentA']
     }),
     new HtmlWebpackPlugin({
       title: 'Test ComponentB',
@@ -72,6 +75,11 @@ module.exports = {
       chunks: ['componentB']
     })
   ],
+
+  externals: [{
+    'react': 'React',
+    'react-dom': 'ReactDOM'
+  }],
   module: {
     loaders:[{
       // babel loader
@@ -100,5 +108,6 @@ module.exports = {
   }
 
 
-
 }
+
+module.exports = config;
