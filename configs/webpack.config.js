@@ -11,11 +11,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ROOT_PATH = path.resolve(__dirname, '../');
 const NODE_MODULES_PATH = path.resolve(ROOT_PATH, 'node_modules');
 const DIST_JS_PATH = path.resolve(ROOT_PATH, 'dist/js');
-const DIST_HTML_PATH = path.resolve(ROOT_PATH, 'dist/html');
+const DIST_CSS_PATH = path.resolve(ROOT_PATH, 'dist/css');
+const DIST_HTML_PATH = path.resolve(ROOT_PATH, 'dist');
+const TEST_PATH = path.resolve(ROOT_PATH, 'test');
 
 
-
-// Judge if there's an argument '-p' or '--production' in script
+// Judge if there's an argument '-p' or '--production' in command
 var isProduction = false;
 for (let i in process.argv) {
   if (process.argv[i] === '-p' || process.argv[i] === '--production') {
@@ -26,28 +27,27 @@ for (let i in process.argv) {
 var outputName  = isProduction ? 'u.all.min' : 'u.all';
 
 var cleanPath = [
-  path.resolve(ROOT_PATH, '*.zip'),
-  path.resolve(DIST_HTML_PATH, '*.html'),
+  // path.resolve(ROOT_PATH, '*.zip'),
+  // path.resolve(DIST_HTML_PATH, '*.html'),
 ];
 
-if(isProduction) {
-  cleanPath.push(path.resolve(DIST_JS_PATH, '*.min.js'));
-} else {
-  cleanPath.push(path.resolve(DIST_JS_PATH, '*.js'));
-}
+
 
 
 var config = {
   entry:  {
     [outputName]: [
-      './src/componentA/componentA'
+      './src/componentA/componentA',
+      './src/componentB/componentB'
     ],
+/*   
     'componentA': './src/componentA/componentA',
     'componentB': './src/componentB/componentB',
-    'test-componentA': './src/componentA/test-componentA',
+    //'test-componentA': './src/componentA/test-componentA',
+*/ 
   },
   output: {
-    path: DIST_JS_PATH,
+    path: isProduction ? DIST_JS_PATH : TEST_PATH,
     filename: '[name].js'
   },
   plugins: [
@@ -58,22 +58,22 @@ var config = {
       root: ROOT_PATH,
       verbose: true // open console information output
     }),
-    new HtmlWebpackPlugin({
-      title: 'Test APP',
-      filename: '../html/index.html',
-      chunks: [outputName]
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Test ComponentA',
-      filename: '../html/test-componentA.html',
-      template: path.resolve(ROOT_PATH, './src/componentA/test-componentA.ejs'),
-      chunks: ['test-componentA']
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Test ComponentB',
-      filename: '../html/test-componentB.html',
-      chunks: ['componentB']
-    })
+    // new HtmlWebpackPlugin({
+    //   title: 'Test APP',
+    //   filename: '../html/index.html',
+    //   chunks: [outputName]
+    // }),
+    // new HtmlWebpackPlugin({
+    //   title: 'Test ComponentA',
+    //   filename: '../html/test-componentA.html',
+    //   template: path.resolve(ROOT_PATH, './src/componentA/test-componentA.ejs'),
+    //   chunks: ['test-componentA']
+    // }),
+    // new HtmlWebpackPlugin({
+    //   title: 'Test ComponentB',
+    //   filename: '../html/test-componentB.html',
+    //   chunks: ['componentB']
+    // })
   ],
 
   externals: [{
@@ -128,7 +128,53 @@ var config = {
 //     }
 // });
 
+console.log(typeof(config.plugins));
 
+if(isProduction) {
+  cleanPath.push(path.resolve(DIST_JS_PATH, '*.min.js'));
+
+  // config.entry[outputName] = [
+  //   './src/componentA/componentA',
+  //   './src/componentB/componentB'
+  // ];
+  config.entry['componentA'] = './src/componentA/componentA';
+  config.entry['componentB'] = './src/componentB/componentB';
+
+  config.plugins.push(new HtmlWebpackPlugin({
+    title: 'Test APP',
+    filename: '../index.html',
+    chunks: [outputName]
+  }));
+
+} else {
+  // cleanPath.push(path.resolve(DIST_JS_PATH, '*.js'));
+
+  // config.entry[outputName] = [
+  //   './src/componentA/componentA',
+  //   './src/componentB/componentB'
+  // ];
+
+  config.entry['componentA/test-componentA'] = './src/componentA/test-componentA';
+  config.entry['componentB/test-componentB'] = './src/componentB/test-componentB';
+
+  config.plugins.push(new HtmlWebpackPlugin({
+    title: 'Test ComponentA',
+    filename: './test-componentA.html',
+    template: path.resolve(ROOT_PATH, './src/componentA/test-componentA.ejs'),
+    chunks: ['componentA/test-componentA']
+  }));
+
+  config.plugins.push(new HtmlWebpackPlugin({
+    title: 'Test ComponentB',
+    filename: './test-componentB.html',
+    template: path.resolve(ROOT_PATH, './src/componentB/test-componentB.ejs'),
+    chunks: ['componentB/test-componentB']
+  }));
+
+
+}
+
+console.log(typeof(config.plugins));
 
 
 module.exports = config;
