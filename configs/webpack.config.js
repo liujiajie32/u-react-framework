@@ -1,30 +1,39 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const webpack = require('webpack');
+const fs = require( 'fs' );
+const path = require( 'path' );
+const webpack = require( 'webpack' );
 // const CommonChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin"); 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
+const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+
+const paths = require( './paths' );
+
 
 // Folder path definition
-const ROOT_PATH = path.resolve(__dirname, '../');
-const NODE_MODULES_PATH = path.resolve(ROOT_PATH, 'node_modules');
-const DIST_JS_PATH = path.resolve(ROOT_PATH, 'dist/js');
-const DIST_CSS_PATH = path.resolve(ROOT_PATH, 'dist/css');
-const DIST_HTML_PATH = path.resolve(ROOT_PATH, 'dist');
-const TEST_PATH = path.resolve(ROOT_PATH, 'test');
+const ROOT_PATH = path.resolve( __dirname, '../' );
+const NODE_MODULES_PATH = path.resolve( ROOT_PATH, 'node_modules' );
+const DIST_JS_PATH = path.resolve( ROOT_PATH, 'dist/js' );
+const DIST_CSS_PATH = path.resolve( ROOT_PATH, 'dist/css' );
+const DIST_HTML_PATH = path.resolve( ROOT_PATH, 'dist' );
+const TEST_PATH = path.resolve( ROOT_PATH, 'test' );
+
+// 3rd party dependencies
+// const deps = [
+//   'react/dist/react.min.js',
+//   'react-dom/dist/react-dom.min.js'
+// ]; 
 
 
 // Judge if there's an argument '-p' or '--production' in command
 var isProduction = false;
-for (let i in process.argv) {
-  if (process.argv[i] === '-p' || process.argv[i] === '--production') {
+for(let i in process.argv) {
+  if(process.argv[ i ] === '-p' || process.argv[ i ] === '--production') {
     isProduction = true;
     break;
   }
 }
-var outputName  = isProduction ? 'u.all.min' : 'u.all';
+var outputName = isProduction ? 'u.all.min' : 'u.all';
 
 var cleanPath = [
   // path.resolve(ROOT_PATH, '*.zip'),
@@ -35,76 +44,85 @@ var cleanPath = [
 
 
 var config = {
-  entry:  {
+  entry: {
     [outputName]: [
       './src/componentA/componentA',
       './src/componentB/componentB'
     ],
-/*   
-    'componentA': './src/componentA/componentA',
-    'componentB': './src/componentB/componentB',
-    //'test-componentA': './src/componentA/test-componentA',
-*/ 
+  /*   
+      'componentA': './src/componentA/componentA',
+      'componentB': './src/componentB/componentB',
+      //'test-componentA': './src/componentA/test-componentA',
+  */
   },
   output: {
     path: isProduction ? DIST_JS_PATH : TEST_PATH,
-    filename: '[name].js'
+    filename: '[name].js',
+    libraryTarget: 'umd'
   },
   plugins: [
     // Abstract common chunks to vendor.js
     // new CommonChunkPlugin({name: 'vendors', filename:'vendors.js'}),
     // Clean dist folder before compiling
-    new CleanWebpackPlugin(cleanPath, {
+    new CleanWebpackPlugin( cleanPath, {
       root: ROOT_PATH,
       verbose: true // open console information output
-    }),
-    // new HtmlWebpackPlugin({
-    //   title: 'Test APP',
-    //   filename: '../html/index.html',
-    //   chunks: [outputName]
-    // }),
-    // new HtmlWebpackPlugin({
-    //   title: 'Test ComponentA',
-    //   filename: '../html/test-componentA.html',
-    //   template: path.resolve(ROOT_PATH, './src/componentA/test-componentA.ejs'),
-    //   chunks: ['test-componentA']
-    // }),
-    // new HtmlWebpackPlugin({
-    //   title: 'Test ComponentB',
-    //   filename: '../html/test-componentB.html',
-    //   chunks: ['componentB']
-    // })
+    } ),
+  // new HtmlWebpackPlugin({
+  //   title: 'Test APP',
+  //   filename: '../html/index.html',
+  //   chunks: [outputName]
+  // }),
+  // new HtmlWebpackPlugin({
+  //   title: 'Test ComponentA',
+  //   filename: '../html/test-componentA.html',
+  //   template: path.resolve(ROOT_PATH, './src/componentA/test-componentA.ejs'),
+  //   chunks: ['test-componentA']
+  // }),
+  // new HtmlWebpackPlugin({
+  //   title: 'Test ComponentB',
+  //   filename: '../html/test-componentB.html',
+  //   chunks: ['componentB']
+  // })
   ],
 
-  externals: [{
+  externals: [ {
+    // require('react') or require('react-dom') is external
+    // and available on the global var React/ReactDOM
     'react': 'React',
     'react-dom': 'ReactDOM'
-  }],
+  } ],
   module: {
-    loaders:[{
+    //noParse: [],
+
+    loaders: [ {
       // babel loader
-      test:/\.(js|jsx)$/,
+      test: /\.(js|jsx)$/,
       loader: 'babel-loader',
       exclude: /(node_modules)/,
       // include: DIST_JS_PATH,
       query: {
-        presets: ['es2015', 'stage-1', 'react'],
-        plugins: [
-          ["transform-runtime", {
-            "helpers": false,
-            "polyfill": true,
-            "regenerator": true
-          }],
-          "add-module-exports",
-          "transform-es3-member-expression-literals",
-          "transform-es3-property-literals"
-        ]
+        presets: [
+          //  'es2015', 
+          // 'stage-1',
+          'react' ],
+      // plugins: [
+      //   ["transform-runtime", {
+      //     "helpers": false,
+      //     "polyfill": true,
+      //     "regenerator": true
+      //   }],
+      //   "add-module-exports",
+      //   "transform-es3-member-expression-literals",
+      //   "transform-es3-property-literals"
+      // ]
       }
-    }]
+    } ]
   },
 
-  resolve:{
-    extensions:['.js', '.jsx', '.css']
+  resolve: {
+    extensions: [ '.js', '.jsx', '.css' ],
+    alias: {}
   }
 
 }
@@ -128,23 +146,23 @@ var config = {
 //     }
 // });
 
-console.log(typeof(config.plugins));
+// console.log(typeof(config.plugins));
 
 if(isProduction) {
-  cleanPath.push(path.resolve(DIST_JS_PATH, '*.min.js'));
+  cleanPath.push( path.resolve( DIST_JS_PATH, '*.min.js' ) );
 
   // config.entry[outputName] = [
   //   './src/componentA/componentA',
   //   './src/componentB/componentB'
   // ];
-  config.entry['componentA'] = './src/componentA/componentA';
-  config.entry['componentB'] = './src/componentB/componentB';
+  config.entry[ 'componentA' ] = './src/componentA/componentA';
+  config.entry[ 'componentB' ] = './src/componentB/componentB';
 
-  config.plugins.push(new HtmlWebpackPlugin({
+  config.plugins.push( new HtmlWebpackPlugin( {
     title: 'Test APP',
     filename: '../index.html',
-    chunks: [outputName]
-  }));
+    chunks: [ outputName ]
+  } ) );
 
 } else {
   // cleanPath.push(path.resolve(DIST_JS_PATH, '*.js'));
@@ -154,27 +172,40 @@ if(isProduction) {
   //   './src/componentB/componentB'
   // ];
 
-  config.entry['componentA/test-componentA'] = './src/componentA/test-componentA';
-  config.entry['componentB/test-componentB'] = './src/componentB/test-componentB';
+  config.entry[ 'componentA/test-componentA' ] = './src/componentA/test-componentA';
+  config.entry[ 'componentB/test-componentB' ] = './src/componentB/test-componentB';
 
-  config.plugins.push(new HtmlWebpackPlugin({
+  config.plugins.push( new HtmlWebpackPlugin( {
     title: 'Test ComponentA',
     filename: './test-componentA.html',
-    template: path.resolve(ROOT_PATH, './src/componentA/test-componentA.ejs'),
-    chunks: ['componentA/test-componentA']
-  }));
+    template: path.resolve( ROOT_PATH, './src/componentA/test-componentA.ejs' ),
+    chunks: [ 'componentA/test-componentA' ]
+  } ) );
 
-  config.plugins.push(new HtmlWebpackPlugin({
+  config.plugins.push( new HtmlWebpackPlugin( {
     title: 'Test ComponentB',
     filename: './test-componentB.html',
-    template: path.resolve(ROOT_PATH, './src/componentB/test-componentB.ejs'),
-    chunks: ['componentB/test-componentB']
-  }));
+    template: path.resolve( ROOT_PATH, './src/componentB/test-componentB.ejs' ),
+    chunks: [ 'componentB/test-componentB' ]
+  } ) );
 
 
 }
 
-console.log(typeof(config.plugins));
+// Use compressed versions in packaging
+if(paths.depsFromCDN.length) {
+  config.module.noParse = new Array();
+
+  paths.depsFromCDN.forEach( function( dep ) {
+    var depPath = path.resolve( NODE_MODULES_PATH, dep );
+    config.resolve.alias[ dep.split( path.sep )[ 0 ] ] = depPath;
+    config.module.noParse.push( depPath );
+  } );
+
+}
+
+// console.log(config.resolve.alias);
+// console.log(config.module.noParse);
 
 
 module.exports = config;
