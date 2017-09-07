@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 55);
+/******/ 	return __webpack_require__(__webpack_require__.s = 54);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -912,25 +912,103 @@ exports["default"] = ComponentA;
 module.exports = exports["default"];
 
 /***/ }),
-/* 53 */,
-/* 54 */,
-/* 55 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _componentA = __webpack_require__(52);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-var _componentA2 = _interopRequireDefault(_componentA);
+var _defineProperty = __webpack_require__(20);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
-ReactDOM.render(React.createElement(_componentA2['default'], null), document.getElementById('root'));
-//registerServiceWorker();
-//import React from 'react';
-//import ReactDOM from 'react-dom';
-//import './index.css';
+var _setPrototypeOf = __webpack_require__(21);
+
+var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+
+var _create = __webpack_require__(22);
+
+var _create2 = _interopRequireDefault(_create);
+
+var _getPrototypeOf = __webpack_require__(23);
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; (0, _defineProperty2["default"])(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(24);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = (0, _create2["default"])(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) _setPrototypeOf2["default"] ? (0, _setPrototypeOf2["default"])(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import logo from './logo.svg';
+// import './App.css';
+
+var ComponentB = function (_Component) {
+  _inherits(ComponentB, _Component);
+
+  function ComponentB() {
+    _classCallCheck(this, ComponentB);
+
+    return _possibleConstructorReturn(this, (ComponentB.__proto__ || (0, _getPrototypeOf2["default"])(ComponentB)).apply(this, arguments));
+  }
+
+  _createClass(ComponentB, [{
+    key: "render",
+    value: function render() {
+      return _react2["default"].createElement(
+        "div",
+        { className: "App" },
+        _react2["default"].createElement(
+          "div",
+          { className: "App-header" },
+          "//",
+          _react2["default"].createElement("img", { src: "", className: "App-logo", alt: "logo" }),
+          _react2["default"].createElement(
+            "h2",
+            null,
+            "Welcome to React"
+          )
+        ),
+        _react2["default"].createElement(
+          "p",
+          { className: "App-intro" },
+          "To get started, edit ",
+          _react2["default"].createElement(
+            "code",
+            null,
+            "src/App.js"
+          ),
+          " and save to reload."
+        )
+      );
+    }
+  }]);
+
+  return ComponentB;
+}(_react.Component);
+
+exports["default"] = ComponentB;
+module.exports = exports["default"];
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(52);
+module.exports = __webpack_require__(53);
+
 
 /***/ })
 /******/ ]);
