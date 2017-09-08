@@ -128,7 +128,7 @@ var config = {
 // console.log(typeof(config.plugins));
 
 if(isProduction) {
-  cleanPath.push(path.resolve(paths.distJS, '*.min.js' ));
+  cleanPath.push(path.resolve(paths.distJS, '*.min.js'));
 
   // config.entry[outputName] = [
   //   './src/componentA/componentA',
@@ -137,11 +137,11 @@ if(isProduction) {
   config.entry[ 'componentA' ] = './src/componentA/componentA';
   config.entry[ 'componentB' ] = './src/componentB/componentB';
 
-  config.plugins.push( new HtmlWebpackPlugin( {
-    title: 'Test APP',
-    filename: '../index.html',
-    chunks: [ outputName ]
-  } ) );
+config.plugins.push(new HtmlWebpackPlugin({
+  title: 'Test APP',
+  filename: '../index.html',
+  chunks: [ outputName ]
+}));
 
 } else {
 
@@ -188,7 +188,7 @@ if(isProduction) {
     //filename: 'componentB/test-componentB.html',
     filename: path.resolve(paths.testHTML, 'componentB/test-componentB.html'),
     template: paths.defaultTemplate,
-    chunks: [ '../componentB/test-componentB'],
+    chunks: [ '../componentB/test-componentB' ],
     hash: true
   }));
 
@@ -207,6 +207,29 @@ if(paths.vendorsFromLocal.length) {
     config.module.noParse.push(vendorPath);
   } );
 }
+
+function sef(sd, dd) {
+
+}
+
+var t = fs.readdirSync(paths.src);
+var subDir = {};
+
+fs.readdirSync(paths.src).forEach(function(item) {
+//  console.log(item);
+  let p = path.resolve(paths.src, item);
+  let s = fs.statSync(p);
+  if(s.isDirectory()) {
+    subDir[item] = path.resolve(p, item);
+  }
+});
+
+console.log(subDir);
+
+
+
+
+
 
 
 module.exports = config;

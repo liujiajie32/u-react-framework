@@ -33,7 +33,7 @@ module.exports = {
   root,
   nodeModules: resolvePath('node_modules'),
   src: resolvePath('src'),
-  defaultTemplate: resolvePath('src/test-componen.ejs'),
+  defaultTemplate: resolvePath('src/test-component.ejs'),
   prodJS: resolvePath('dist/js'),
   prodCSS: resolvePath('dist/css'),
   prodHTML: resolvePath('dist'),
