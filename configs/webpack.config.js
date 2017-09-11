@@ -6,16 +6,8 @@ const webpack = require( 'webpack' );
 // const CommonChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin"); 
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-
+const JSON = require('json3');
 const paths = require( './paths' );
-
-// Folder path definition
-// const ROOT_PATH = path.resolve(__dirname, '../');
-// const NODE_MODULES_PATH = path.resolve( ROOT_PATH, 'node_modules' );
-// const DIST_JS_shPATH = path.resolve( ROOT_PATH, 'dist/js' );
-// const DIST_CSS_PATH = path.resolve( ROOT_PATH, 'dist/css' );
-// const DIST_HTML_PATH = path.resolve( ROOT_PATH, 'dist' );
-// const TEST_PATH = path.resolve( ROOT_PATH, 'test' );
 
 // Judge if there's an argument '-p' or '--production' in command
 let isProduction = false;
@@ -29,17 +21,17 @@ let outputName = isProduction ? 'u.all.min' : 'u.all';
 
 var config = {
   entry: {
-    [outputName]: [
-      './src/componentA/componentA',
-      './src/componentB/componentB'
-    ],
-    'componentA': './src/componentA/componentA',
-    'componentB': './src/componentB/componentB',
-//    '../componentA/test-componentA': './src/componentA/test-componentA',
+//     [outputName]: [
+//       './src/componentA/componentA',
+//       './src/componentB/componentB'
+//     ],
+//     'componentA': './src/componentA/componentA',
+//     'componentB': './src/componentB/componentB',
+// //    '../componentA/test-componentA': './src/componentA/test-componentA',
 
   },
   output: {
-    path: isProduction ? paths.prodJS : paths.testJS,
+    path: isProduction ? paths.prodJS : paths.testHTML,
   //  publicPath: './',
     filename: '[name].js',
     libraryTarget: 'umd'
@@ -78,9 +70,13 @@ var config = {
       // babel loader
       test: /\.(js|jsx)$/,
       loader: 'babel-loader',
-      exclude: /(node_modules)/,
-      // include: DIST_JS_PATH,
-      query: {
+      exclude: /(node_modules|bower_components)/,
+      include: paths.src,
+      options: {
+        // Not to use .babelrc or .babelignore files
+        babelrc: false,
+        // use the default cache directory in node_modules/.cache/babel-loader
+        cacheDirectory: true,
         presets: [
           'es2015', 
           'stage-1',
@@ -100,8 +96,8 @@ var config = {
   },
 
   resolve: {
-    extensions: [ '.js', '.jsx', '.css' ],
-//    alias: {}
+    extensions: ['.jsx', '.js'],
+    // alias: {}
   }
 
 }
@@ -125,78 +121,84 @@ var config = {
 //     }
 // });
 
-// console.log(typeof(config.plugins));
+
+
+
+//console.log(cmpnList);
 
 if(isProduction) {
+  // Clean files in dist folder
   cleanPath.push(path.resolve(paths.distJS, '*.min.js'));
 
-  // config.entry[outputName] = [
-  //   './src/componentA/componentA',
-  //   './src/componentB/componentB'
-  // ];
-  config.entry[ 'componentA' ] = './src/componentA/componentA';
-  config.entry[ 'componentB' ] = './src/componentB/componentB';
+  config.entry = JSON.parse(JSON.stringify(paths.cmpnSrcList));
+  config.entry[outputName] = new Array();
+  for(let p in cmpnList) {
+    config.entry[outputName].push(cmpnList[p]);
+  }
 
-config.plugins.push(new HtmlWebpackPlugin({
-  title: 'Test APP',
-  filename: '../index.html',
-  chunks: [ outputName ]
-}));
+  console.log(config.entry);
 
-} else {
-
-  config.plugins.push(new CleanWebpackPlugin('test', {
-    root: paths.root,
-    verbose: true // open console information output
+  config.plugins.push(new HtmlWebpackPlugin({
+    title: 'Test APP',
+    filename: '../index.html',
+    chunks: [ outputName ]
   }));
 
+} else {
+  // Clean files in test folder
+  // config.plugins.push(new CleanWebpackPlugin('test', {
+  //   root: paths.root,
+  //   verbose: true // open console information output
+  // }));
 
+  console.log(paths.cmpnTestList);
 
-  // config.entry[outputName] = [
-  //   './src/componentA/componentA',
-  //   './src/componentB/componentB'
-  // ];
-  let testEntry = {
+  config.entry = JSON.parse(JSON.stringify(paths.cmpnTestList));
+  // config.plugins.push(new HtmlWebpackPlugin({
+  //   title: 'Test framework',
+  //   filename: path.resolve(paths.testHTML, 'index.html'),
+  //   template: paths.defaultTemplate,
+  //   chunks: [ outputName ],
+  //   hash: true,
+  //   chunksSortMode: function() {console.log(arguments)}
+  // }));
+
+  for(let c in paths.cmpnTestList) {
+    config.plugins.push(new HtmlWebpackPlugin({
+      title: c.slice(c.indexOf('/')+1, c.length),
+      //filename: 'componentA/test-componentA.html',
+      filename: c+'.html',
+      template: paths.defaultTemplate,
+      chunks: [c],
+      hash: true
+    }));
 
   }
 
-  config.entry['../componentA/test-componentA'] = './src/componentA/test-componentA';
-  config.entry['../componentB/test-componentB'] = './src/componentB/test-componentB';
+  // config.plugins.push(new HtmlWebpackPlugin({
+  //   title: 'Test componentA',
+  //   //filename: 'componentA/test-componentA.html',
+  //   filename: 'componentA/test-componentA.html',
+  //   template: paths.defaultTemplate,
+  //   chunks: ['componentA/test-componentA'],
+  //   hash: true
+  // }));
 
 
-  config.plugins.push(new HtmlWebpackPlugin({
-    title: 'Test framework',
-    filename: path.resolve(paths.testHTML, 'index.html'),
-    template: paths.defaultTemplate,
-    chunks: [ outputName ],
-    hash: true,
-    chunksSortMode: function() {console.log(arguments)}
-  }));
-
-  config.plugins.push(new HtmlWebpackPlugin({
-    title: 'Test componentA',
-    //filename: 'componentA/test-componentA.html',
-    filename: path.resolve(paths.testHTML, 'componentA/test-componentA.html'),
-    template: paths.defaultTemplate,
-    chunks: [ '../componentA/test-componentA'],
-    hash: true
-  }));
-
-
-  config.plugins.push(new HtmlWebpackPlugin({
-    title: 'Test componentB',
-    //filename: 'componentB/test-componentB.html',
-    filename: path.resolve(paths.testHTML, 'componentB/test-componentB.html'),
-    template: paths.defaultTemplate,
-    chunks: [ '../componentB/test-componentB' ],
-    hash: true
-  }));
+  // config.plugins.push(new HtmlWebpackPlugin({
+  //   title: 'Test componentB',
+  //   //filename: 'componentB/test-componentB.html',
+  //   filename: 'componentB/test-componentB.html',
+  //   template: paths.defaultTemplate,
+  //   chunks: ['componentB/test-componentB'],
+  //   hash: true
+  // }));
 
 
 }
 
 // Use vendors form local
-// Use compressed versions in packaging
+// Use compressed versions in p11ackaging
 if(paths.vendorsFromLocal.length) {
   config.resolve.alias = new Object();
   config.module.noParse = new Array();
@@ -208,27 +210,14 @@ if(paths.vendorsFromLocal.length) {
   } );
 }
 
+
+
+
+
+
 function sef(sd, dd) {
 
 }
-
-var t = fs.readdirSync(paths.src);
-var subDir = {};
-
-fs.readdirSync(paths.src).forEach(function(item) {
-//  console.log(item);
-  let p = path.resolve(paths.src, item);
-  let s = fs.statSync(p);
-  if(s.isDirectory()) {
-    subDir[item] = path.resolve(p, item);
-  }
-});
-
-console.log(subDir);
-
-
-
-
 
 
 
