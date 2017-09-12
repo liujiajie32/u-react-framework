@@ -21,19 +21,13 @@ let outputName = isProduction ? 'u.all.min' : 'u.all';
 
 var config = {
   entry: {
-//     [outputName]: [
-//       './src/componentA/componentA',
-//       './src/componentB/componentB'
-//     ],
-//     'componentA': './src/componentA/componentA',
-//     'componentB': './src/componentB/componentB',
-// //    '../componentA/test-componentA': './src/componentA/test-componentA',
-
+    'u': './src/u.all'
   },
   output: {
     path: isProduction ? paths.prodJS : paths.testHTML,
   //  publicPath: './',
     filename: '[name].js',
+    library: '[name]',
     libraryTarget: 'umd'
   },
   plugins: [
@@ -130,11 +124,13 @@ if(isProduction) {
   // Clean files in dist folder
   cleanPath.push(path.resolve(paths.distJS, '*.min.js'));
 
-  config.entry = JSON.parse(JSON.stringify(paths.cmpnSrcList));
-  config.entry[outputName] = new Array();
-  for(let p in cmpnList) {
-    config.entry[outputName].push(cmpnList[p]);
-  }
+  Object.assign(config.entry, paths.cmpnTestList);
+
+  // config.entry = JSON.parse(JSON.stringify(paths.cmpnSrcList));
+  // config.entry[outputName] = new Array();
+  // for(let p in cmpnList) {
+  //   config.entry[outputName].push(cmpnList[p]);
+  // }
 
   console.log(config.entry);
 
@@ -151,9 +147,13 @@ if(isProduction) {
   //   verbose: true // open console information output
   // }));
 
-  console.log(paths.cmpnTestList);
+  // console.log(paths.cmpnTestList);
 
-  config.entry = JSON.parse(JSON.stringify(paths.cmpnTestList));
+  Object.assign(config.entry, paths.cmpnTestList);
+
+console.log(config.entry);
+
+  //config.entry = JSON.parse(JSON.stringify(paths.cmpnTestList));
   // config.plugins.push(new HtmlWebpackPlugin({
   //   title: 'Test framework',
   //   filename: path.resolve(paths.testHTML, 'index.html'),
