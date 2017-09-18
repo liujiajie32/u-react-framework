@@ -6,7 +6,6 @@ const webpack = require( 'webpack' );
 // const CommonChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin"); 
 const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
 const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-const JSON = require('json3');
 const paths = require( './paths' );
 
 // Judge if there's an argument '-p' or '--production' in command
@@ -122,7 +121,7 @@ var config = {
 
 if(isProduction) {
   // Clean files in dist folder
-  cleanPath.push(path.resolve(paths.distJS, '*.min.js'));
+  //cleanPath.push(path.resolve(paths.distJS, '*.min.js'));
 
   Object.assign(config.entry, paths.cmpnTestList);
 
@@ -204,19 +203,10 @@ if(paths.vendorsFromLocal.length) {
   config.module.noParse = new Array();
 
   paths.vendorsFromLocal.forEach(function(vendor) {
-    var vendorPath = path.resolve(paths.nodeModules, vendor);
+    let vendorPath = path.resolve(paths.nodeModules, vendor);
     config.resolve.alias[vendor.split(path.sep)[0]] = vendorPath;
     config.module.noParse.push(vendorPath);
   } );
-}
-
-
-
-
-
-
-function sef(sd, dd) {
-
 }
 
 
