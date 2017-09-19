@@ -27,10 +27,12 @@ let clean = [
 
 ];
 
-// Scan component source file and add it to cmpnList
-// path format: src/{Comonent Name}/{Component Name}.jsx
-let cmpnSrcList = {};
-let cmpnTestList = {};
+// Scan component source files and add them to cmpnList
+// path format: src/{Comonent Name}/{Component Name}.(jsx|js)
+// Scan component test files and add them to cmpnTestList
+// path format: src/{Comonent Name}/test-{Component Name}.(jsx|js)
+let cmpnSrcList = new Object();
+let cmpnTestList = new Object();
 
 fs.readdirSync(resolvePath('src')).forEach(function(dir) {
   let subDir = path.resolve(resolvePath('src'), dir);
@@ -47,7 +49,7 @@ fs.readdirSync(resolvePath('src')).forEach(function(dir) {
 
     cmpnTestList[dir+'/test-'+dir] = fs.existsSync(cmpnTestJSX) ?
       cmpnTestJSX : fs.existsSync(cmpnTestJS) ?
-        cmpnTestJS : cmpnTestList[dir];
+        cmpnTestJS : cmpnTestList[dir+'/test-'+dir];
   }
 });
 
@@ -63,9 +65,9 @@ module.exports = {
   cmpnTestList,
   defaultTemplate: resolvePath('src/test-component.ejs'),
 
-  prodJS: resolvePath('dist/js'),
-  prodCSS: resolvePath('dist/css'),
-  prodHTML: resolvePath('dist'),
+  distJS: resolvePath('dist/'+process.env.npm_package_version+'/js'),
+  distCSS: resolvePath('dist/'+process.env.npm_package_version+'/css'),
+  distHTML: resolvePath('dist/'+process.env.npm_package_version),
 
   testJS: resolvePath('test/js'),
   testCSS: resolvePath('test/css'),

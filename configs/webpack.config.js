@@ -4,8 +4,8 @@ const fs = require( 'fs' );
 const path = require('path');
 const webpack = require( 'webpack' );
 // const CommonChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin"); 
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
-const HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+const cleanWebpackPlugin = require( 'clean-webpack-plugin' );
+const htmlWebpackPlugin = require( 'html-webpack-plugin' );
 const paths = require( './paths' );
 
 // Judge if there's an argument '-p' or '--production' in command
@@ -16,16 +16,16 @@ for(let i in process.argv) {
     break;
   }
 }
-let outputName = isProduction ? 'u.all.min' : 'u.all';
+let outputName = 'u';
 
 var config = {
   entry: {
     'u': './src/u.all'
   },
   output: {
-    path: isProduction ? paths.prodJS : paths.testHTML,
+    path: isProduction ? paths.distJS : paths.testHTML,
   //  publicPath: './',
-    filename: '[name].js',
+    filename: isProduction ? '[name].min.js' : '[name].js',
     library: '[name]',
     libraryTarget: 'umd'
   },
@@ -37,18 +37,18 @@ var config = {
     //   root: paths.root,
     //   verbose: true // open console information output
     // }),
-    // new HtmlWebpackPlugin({
+    // new htmlWebpackPlugin({
     //   title: 'Test Framework',
     //   filename: '../index.html',
     //   chunks: [outputName]
     // }),
-    // new HtmlWebpackPlugin({
+    // new htmlWebpackPlugin({
     //   title: 'Test ComponentA',
     //   filename: 'test-componentA.html',
     //   template: path.resolve(paths.src, 'test-component.ejs'),
     //   chunks: ['test-componentA']
 //    }),
-  // new HtmlWebpackPlugin({
+  // new htmlWebpackPlugin({
   //   title: 'Test ComponentB',
   //   filename: '../html/test-componentB.html',
   //   chunks: ['componentB']
@@ -95,7 +95,7 @@ var config = {
 
 }
 
-// // 遍历所有.html文件，使用HtmlWebpackPlugin将资源文件引入html中
+// // 遍历所有.html文件，使用htmlWebpackPlugin将资源文件引入html中
 // var htmlfiles = fs.readdirSync(HTML_ROOT_PATH);
 // htmlfiles.forEach(function (item) {
 //     var currentpath = path.join(HTML_ROOT_PATH, item);
@@ -103,7 +103,7 @@ var config = {
 //     var extname = path.extname(currentpath);
 //     if (fs.statSync(currentpath).isFile()) {
 //         //console.log("replace", currentpath.replace("\\html\\", "\\dist\\"))
-//         config.plugins.push(new HtmlWebpackPlugin({
+//         config.plugins.push(new htmlWebpackPlugin({
 //             title: '',
 //             template: currentpath,
 //             filename: currentpath.replace("\\html\\", "\\dist\\"),
@@ -121,9 +121,14 @@ var config = {
 
 if(isProduction) {
   // Clean files in dist folder
-  //cleanPath.push(path.resolve(paths.distJS, '*.min.js'));
+  if(paths.clean.length) {
+    config.plugins.push(new CleanWebpackPlugin(paths.clean, {
+      root: paths.root,
+      verbose: true // open console information output
+    }));
+  }
 
-  Object.assign(config.entry, paths.cmpnTestList);
+  Object.assign(config.entry, paths.cmpnSrcList);
 
   // config.entry = JSON.parse(JSON.stringify(paths.cmpnSrcList));
   // config.entry[outputName] = new Array();
@@ -133,7 +138,7 @@ if(isProduction) {
 
   console.log(config.entry);
 
-  config.plugins.push(new HtmlWebpackPlugin({
+  config.plugins.push(new htmlWebpackPlugin({
     title: 'Test APP',
     filename: '../index.html',
     chunks: [ outputName ]
@@ -153,7 +158,7 @@ if(isProduction) {
 console.log(config.entry);
 
   //config.entry = JSON.parse(JSON.stringify(paths.cmpnTestList));
-  // config.plugins.push(new HtmlWebpackPlugin({
+  // config.plugins.push(new htmlWebpackPlugin({
   //   title: 'Test framework',
   //   filename: path.resolve(paths.testHTML, 'index.html'),
   //   template: paths.defaultTemplate,
@@ -163,7 +168,7 @@ console.log(config.entry);
   // }));
 
   for(let c in paths.cmpnTestList) {
-    config.plugins.push(new HtmlWebpackPlugin({
+    config.plugins.push(new htmlWebpackPlugin({
       title: c.slice(c.indexOf('/')+1, c.length),
       //filename: 'componentA/test-componentA.html',
       filename: c+'.html',
@@ -174,7 +179,7 @@ console.log(config.entry);
 
   }
 
-  // config.plugins.push(new HtmlWebpackPlugin({
+  // config.plugins.push(new htmlWebpackPlugin({
   //   title: 'Test componentA',
   //   //filename: 'componentA/test-componentA.html',
   //   filename: 'componentA/test-componentA.html',
@@ -184,7 +189,7 @@ console.log(config.entry);
   // }));
 
 
-  // config.plugins.push(new HtmlWebpackPlugin({
+  // config.plugins.push(new htmlWebpackPlugin({
   //   title: 'Test componentB',
   //   //filename: 'componentB/test-componentB.html',
   //   filename: 'componentB/test-componentB.html',
